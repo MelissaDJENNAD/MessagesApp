@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html ng-app="application">
+  <head>
+    <meta charset="utf-8">
+    <script src="node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootflat/2.0.4/css/bootflat.min.css" />
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<link rel="stylesheet" href="style.css">
+<script src="script.js" charset="utf-8"></script>
+<script src="node_modules/moment/min/moment-with-locales.js" charset="utf-8"></script>
+<script src="node_modules/angular-moment/angular-moment.min.js" charset="utf-8"></script>
+
+    <title></title>
+  </head>
+  <body ng-controller =" monController">
+
+          <nav class="navbar navbar-default" ng-show='token'>
+            <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Messages</a>
+              </div>
+
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                  <li><a href="#">Mes messages <span class="sr-only">(current)</span></a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#myModal">Ecrire mes messages</a></li>
+                 <li><a href="#">Inscription, Connexion</a></li>
+
+                </ul>
+
+
+              </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+          </nav>
+
+
+          <div class="container-fluid" ng-show="token" >
+            <div class="row">
+              <div class="col-lg-12">
+          <table class="table table-responsive">
+<thead>
+  <tr>
+    <th>Message</th>
+    <th>Email</th>
+    <th>Lieu, Date</th>
+    <th> <input type="checkbox" ng-model="selectAll" ng-click="allSelect()" >Select all
+</th>
+  </tr>
+</thead>
+<tbody>
+  <tr ng-repeat = "message in messages | orderBy: 'updatedAt':true "  >
+    <td data-toggle="modal" ng-click="editMessage(message)"data-target="#myModal2">{{message.nom}} : {{message.contenue}}</td>
+    <td>{{message.email}}</td>
+    <td> A {{message.lieu}} le {{message.updatedAt | date : "dd.MM.y HH:mm:ss"}} {{message.updatedAt | amTimeAgo}}</td>
+    <td>
+    <input type="checkbox" ng-init="message.select = false "ng-model="message.select">Select
+   </td>
+  </tr>
+</tbody>
+          </table>
+          <button type="button" name="button" ng-click="afficheLogSelect(messages)">Supprimer</button>
+        </div>
+      </div>
+
+<!-- Modal Ajouter-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Envoyer un message</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="inputNom3" class="col-sm-2 control-label">Nom</label>
+            <div class="col-sm-10">
+              <input type="string" class="form-control" id="inputNom3" placeholder="Nom"ng-model="newMessage.nom">
+            </div>
+          </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail3" placeholder="Email"ng-model="newMessage.email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputContenue3" class="col-sm-2 control-label">Message</label>
+          <div class="col-sm-10">
+           <textarea name="name" rows="8" cols="80" type="text" class="form-control" id="inputContenue3" placeholder="text"ng-model="newMessage.contenue"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputLieu3" class="col-sm-2 control-label">Lieu</label>
+          <div class="col-sm-10">
+            <input type="string" class="form-control" id="inputLieu3" placeholder="lieu"ng-model="newMessage.lieu">
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"ng-click="ajouterMessage()">Envoyer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Modification -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel2">Envoyer un message</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="inputNom2" class="col-sm-2 control-label">Nom</label>
+            <div class="col-sm-10">
+              <input type="string" class="form-control" id="inputNom2" placeholder="Nom"ng-model="modifMessage.nom">
+            </div>
+          </div>
+        <div class="form-group">
+          <label for="inputEmail2" class="col-sm-2 control-label">Email</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail2" placeholder="Email"ng-model="modifMessage.email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputContenue2" class="col-sm-2 control-label">Message</label>
+          <div class="col-sm-10">
+           <textarea name="name" rows="8" cols="80" type="text" class="form-control" id="inputContenue2" placeholder="text"ng-model="modifMessage.contenue"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputLieu2" class="col-sm-2 control-label">Lieu</label>
+          <div class="col-sm-10">
+            <input type="string" class="form-control" id="inputLieu2" placeholder="lieu"ng-model="modifMessage.lieu">
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"ng-click="miseAJourMessage()">Envoyer</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="supprimerMessage()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+
+
+<div class="container-fluid"ng-show="!token">
+  <!-- Connexion -->
+
+<div class="row paddingTOPLOGIN">
+  <div class="col-md-offset-2 col-md-8">
+            <div class="form-login">
+            <h4>Welcome . </h4>
+            <form class="form-login" action="index.html" method="post">
+              <label for="identifiant">Tapper un identifiant</label>
+              <input value="Mélissa@Mélissa.Mélissa"type="text" id="identifiant" placeholder="Email" ng-model="user.email" class="form-control input-sm chat-input"><br>
+              <label for="mdp">Password</label>
+              <input type="text" id="mdp" placeholder="Password" ng-model="user.password" class="form-control input-sm chat-input">
+             <button class=" btn btn-success"type="button" name="button" ng-click="inscription()"><i class="glyphicon glyphicon-star-empty"></i>   Inscription</button>
+            <button class=" btn btn-success" type="button" name="button" ng-click="connexion()"><i class=" glyphicon glyphicon-log-in"></i>  Connexion</button>
+            </form>
+            <!-- <div class="wrapper">
+            <span class="group-btn">
+                <a href="#" class="btn btn-primary btn-md">login </a>
+            </span>
+            </div> -->
+            </div>
+
+        </div>
+</div>
+</div>
+  </body>
+</html>
